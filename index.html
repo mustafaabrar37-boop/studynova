@@ -1,0 +1,901 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>StudyNova — Study Smarter</title>
+
+<style>
+:root {
+  --purple: #6757e8;
+  --purple-light: #eeeaff;
+  --ink: #24243a;
+  --muted: #88899e;
+  --line: #eeedf5;
+  --bg: #f7f7fc;
+  --green: #20a879;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+
+aside {
+  width: 235px;
+  flex-shrink: 0;
+  background: white;
+  border-right: 1px solid var(--line);
+  padding: 28px 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin: 0 0 38px 8px;
+}
+
+.brand-name { color: var(--purple); }
+
+.brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #6757e8, #a193ff);
+  color: white;
+  font-size: 25px;
+  box-shadow: 0 5px 14px #6757e844;
+}
+
+.nav-label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin: 20px 8px 12px;
+}
+
+.nav-item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 12px;
+  text-align: left;
+  border-radius: 10px;
+  color: #77778d;
+  margin-bottom: 5px;
+}
+
+.nav-item:hover { background: #f7f5ff; }
+
+.nav-item.active {
+  background: var(--purple-light);
+  color: var(--purple);
+  font-weight: 700;
+}
+
+.side-note {
+  margin-top: 45px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f7f5ff;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.side-note strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* MAIN DASHBOARD */
+
+main {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 4%;
+  max-width: 1500px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.topbar p {
+  margin: 0 0 5px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: clamp(23px, 3vw, 31px);
+  letter-spacing: -1px;
+}
+
+.today {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: #66667c;
+  font-size: 13px;
+}
+
+/* WELCOME BANNER */
+
+.welcome {
+  padding: 30px;
+  border-radius: 20px;
+  color: white;
+  background:
+    radial-gradient(circle at 85% 20%,
+      rgba(255,255,255,0.22), transparent 30%),
+    linear-gradient(115deg, #5546d9, #9181f5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px #6757e826;
+}
+
+.welcome h2 {
+  font-size: clamp(22px, 3vw, 30px);
+  margin: 0 0 10px;
+}
+
+.welcome p {
+  margin: 0;
+  line-height: 1.7;
+  color: #efedff;
+}
+
+.welcome-icon {
+  font-size: 60px;
+  flex-shrink: 0;
+}
+
+/* STAT CARDS */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 25px;
+}
+
+.stat, .panel {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.stat {
+  transition: transform .2s, box-shadow .2s;
+}
+
+.stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px #25234a0b;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.stat-value {
+  font-size: 30px;
+  font-weight: 800;
+  margin: 10px 0 5px;
+  letter-spacing: -1px;
+}
+
+.stat-foot {
+  color: #77778d;
+  font-size: 12px;
+}
+
+/* CONTENT PANELS */
+
+.content-grid {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.6fr) minmax(230px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.panel { margin-bottom: 20px; }
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.panel-heading h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.panel-heading span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* FORM */
+
+form { display: grid; gap: 12px; }
+
+label {
+  display: block;
+  margin-bottom: 7px;
+  color: #65657d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e5e4ef;
+  background: white;
+  border-radius: 9px;
+  color: var(--ink);
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px #6757e817;
+}
+
+.two-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.primary-btn {
+  background: var(--purple);
+  border: 0;
+  color: white;
+  border-radius: 9px;
+  padding: 12px 16px;
+  font-weight: 700;
+  transition: background .2s, transform .2s;
+}
+
+.primary-btn:hover {
+  background: #5040d0;
+  transform: translateY(-1px);
+}
+
+/* FILTERS */
+
+.filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.filter-btn {
+  border: 1px solid var(--line);
+  background: white;
+  color: #77778d;
+  border-radius: 8px;
+  padding: 8px 11px;
+  font-size: 12px;
+}
+
+.filter-btn.active {
+  color: var(--purple);
+  background: var(--purple-light);
+  border-color: #e0dbff;
+}
+
+/* TASKS */
+
+.task {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.task:last-child { border-bottom: 0; }
+
+.task-check {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  accent-color: var(--purple);
+  flex-shrink: 0;
+}
+
+.task-info { flex: 1; min-width: 0; }
+
+.task-title {
+  font-size: 14px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.task.done .task-title {
+  text-decoration: line-through;
+  color: #9999aa;
+}
+
+.task-meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 7px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--purple-light);
+  color: #6250cb;
+  font-size: 11px;
+  margin-right: 5px;
+}
+
+.tag.overdue {
+  background: #fff0f0;
+  color: #cf5252;
+}
+
+.delete-btn {
+  border: 0;
+  background: transparent;
+  color: #a2a2b3;
+  padding: 4px;
+  font-size: 19px;
+}
+
+.delete-btn:hover { color: #dc4d5a; }
+
+.empty {
+  text-align: center;
+  padding: 28px 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* PROGRESS */
+
+.progress-track {
+  height: 9px;
+  background: #eeedf8;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 15px 0 10px;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #6958e9, #a193ff);
+  border-radius: 20px;
+  transition: width .3s;
+}
+
+.progress-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.tip {
+  background: #f0edff;
+  padding: 17px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #625b91;
+}
+
+footer {
+  padding: 25px 0 5px;
+  text-align: center;
+  color: #a0a0b0;
+  font-size: 12px;
+}
+
+/* MOBILE FRIENDLY */
+
+@media (max-width: 950px) {
+  aside { width: 190px; }
+  .content-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 650px) {
+  .layout { display: block; }
+
+  aside {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .brand { margin: 0 0 12px; }
+
+  .nav-label, .side-note { display: none; }
+
+  aside nav { display: flex; gap: 6px; }
+
+  .nav-item {
+    text-align: center;
+    padding: 10px 5px;
+    font-size: 12px;
+  }
+
+  main { padding: 20px 14px; }
+
+  .welcome { padding: 20px; }
+  .welcome-icon { font-size: 40px; }
+
+  .stats { gap: 8px; }
+  .stat { padding: 13px 10px; }
+  .stat-value { font-size: 24px; }
+  .stat-label { font-size: 11px; }
+  .stat-foot { font-size: 10px; }
+
+  .today { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <aside>
+    <div class="brand">
+      <span class="brand-icon">✦</span>
+      <span>Study<span class="brand-name">Nova</span></span>
+    </div>
+
+    <div class="nav-label">WORKSPACE</div>
+
+    <nav>
+      <button class="nav-item active" data-view="all">
+        ▦ Dashboard
+      </button>
+      <button class="nav-item" data-view="pending">
+        ◷ My tasks
+      </button>
+      <button class="nav-item" data-view="completed">
+        ✓ Completed
+      </button>
+    </nav>
+
+    <div class="side-note">
+      <strong>💡 Study tip</strong>
+      Break big assignments into small tasks. Small steps make studying easier!
+    </div>
+  </aside>
+
+  <main>
+
+    <div class="topbar">
+      <div>
+        <p>YOUR PERSONAL STUDY SPACE</p>
+        <h1 id="greeting">Welcome back 👋</h1>
+      </div>
+      <div class="today" id="today"></div>
+    </div>
+
+    <section class="welcome">
+      <div>
+        <h2>Make today count. ✨</h2>
+        <p>
+          Plan your work, focus on your goals,<br>
+          and celebrate every little win.
+        </p>
+        <p style="margin-top:12px;font-size:12px">
+          STUDY SMARTER. GO FURTHER.
+        </p>
+      </div>
+      <div class="welcome-icon">🚀</div>
+    </section>
+
+    <section class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Total tasks</div>
+        <div class="stat-value" id="total">0</div>
+        <div class="stat-foot">All your assignments</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Completed</div>
+        <div class="stat-value" id="completed">0</div>
+        <div class="stat-foot">Tasks finished</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Remaining</div>
+        <div class="stat-value" id="remaining">0</div>
+        <div class="stat-foot">Keep going!</div>
+      </div>
+
+    </section>
+
+    <div class="content-grid">
+
+      <section class="panel">
+        <div class="panel-heading">
+          <h3 id="listTitle">Your tasks</h3>
+          <span id="listCount">0 tasks</span>
+        </div>
+
+        <div class="filter-row">
+          <button class="filter-btn active" data-filter="all">
+            All
+          </button>
+          <button class="filter-btn" data-filter="pending">
+            Pending
+          </button>
+          <button class="filter-btn" data-filter="completed">
+            Completed
+          </button>
+        </div>
+
+        <div id="taskList"></div>
+
+        <div class="empty" id="empty">
+          🌱 Your study journey starts here.<br>
+          Add your first task using the form.
+        </div>
+      </section>
+
+      <div>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <h3>＋ New task</h3>
+          </div>
+
+          <form id="taskForm">
+
+            <div>
+              <label for="taskInput">
+                What do you need to do?
+              </label>
+              <input
+                id="taskInput"
+                maxlength="120"
+                placeholder="e.g. Revise science chapter 3"
+                required>
+            </div>
+
+            <div class="two-fields">
+              <div>
+                <label for="subject">Subject</label>
+                <select id="subject">
+                  <option>Science</option>
+                  <option>Math</option>
+                  <option>English</option>
+                  <option>Urdu</option>
+                  <option>History</option>
+                  <option>Geography</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="dueDate">Due date</label>
+                <input type="date" id="dueDate">
+              </div>
+            </div>
+
+            <button class="primary-btn" type="submit">
+              Add to my tasks +
+            </button>
+
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <h3>My progress</h3>
+            <span>All tasks</span>
+          </div>
+
+          <div style="font-size:27px;font-weight:800" id="percent">
+            0%
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+
+          <div class="progress-caption">
+            <span id="progressText">Let's get started!</span>
+            <span id="progressNumbers">0/0</span>
+          </div>
+        </section>
+
+        <div class="tip">
+          <strong>🚀 Your next step</strong><br>
+          Pick one important task and finish it before moving to the next.
+          Consistency beats cramming!
+        </div>
+
+      </div>
+    </div>
+
+    <footer>
+      StudyNova © 2026 · Study smarter. Go further. ✦
+    </footer>
+
+  </main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let tasks = [];
+let filter = "all";
+let view = "all";
+
+try {
+  const saved = JSON.parse(
+    localStorage.getItem("studybuddy-tasks") || "[]"
+  );
+
+  if (Array.isArray(saved)) {
+    tasks = saved.filter(t =>
+      t &&
+      typeof t.text === "string" &&
+      typeof t.done === "boolean"
+    );
+  }
+} catch {
+  tasks = [];
+}
+
+$("today").textContent = new Date().toLocaleDateString(
+  undefined,
+  { weekday: "short", month: "short", day: "numeric" }
+);
+
+const hour = new Date().getHours();
+
+$("greeting").textContent =
+  (hour < 12 ? "Good morning" :
+   hour < 18 ? "Good afternoon" :
+   "Good evening") + " 👋";
+
+function save() {
+  try {
+    localStorage.setItem(
+      "studybuddy-tasks",
+      JSON.stringify(tasks)
+    );
+  } catch {
+    alert("Your browser could not save the tasks.");
+  }
+}
+
+function render() {
+  const done = tasks.filter(t => t.done).length;
+  const remaining = tasks.length - done;
+
+  const pct = tasks.length
+    ? Math.round(done / tasks.length * 100)
+    : 0;
+
+  $("total").textContent = tasks.length;
+  $("completed").textContent = done;
+  $("remaining").textContent = remaining;
+
+  $("percent").textContent = pct + "%";
+  $("progressFill").style.width = pct + "%";
+
+  $("progressText").textContent =
+    tasks.length === 0 ? "Let's get started!" :
+    pct === 100 ? "Amazing! All tasks complete!" :
+    "Keep up the good work!";
+
+  $("progressNumbers").textContent =
+    done + "/" + tasks.length;
+
+  const shown = tasks
+    .map((task, index) => ({ task, index }))
+    .filter(({ task }) =>
+      (filter === "all" ||
+       (filter === "pending" && !task.done) ||
+       (filter === "completed" && task.done)) &&
+      (view === "all" ||
+       (view === "pending" && !task.done) ||
+       (view === "completed" && task.done))
+    );
+
+  $("taskList").replaceChildren();
+  $("empty").hidden = shown.length > 0;
+
+  $("listCount").textContent =
+    shown.length + (shown.length === 1 ? " task" : " tasks");
+
+  shown.forEach(({ task, index }) => {
+    const row = document.createElement("div");
+    row.className = "task" + (task.done ? " done" : "");
+
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.className = "task-check";
+    check.checked = task.done;
+    check.setAttribute("aria-label", "Complete task");
+
+    check.addEventListener("change", () => {
+      tasks[index].done = check.checked;
+      save();
+      render();
+    });
+
+    const info = document.createElement("div");
+    info.className = "task-info";
+
+    const title = document.createElement("div");
+    title.className = "task-title";
+    title.textContent = task.text;
+
+    const meta = document.createElement("div");
+    meta.className = "task-meta";
+
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = task.subject || "Other";
+    meta.appendChild(tag);
+
+    if (task.dueDate) {
+      const date = document.createElement("span");
+      date.textContent = "Due " + new Date(
+        task.dueDate + "T00:00:00"
+      ).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric"
+      });
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (
+        !task.done &&
+        new Date(task.dueDate + "T00:00:00") < today
+      ) {
+        date.className = "tag overdue";
+        date.textContent = "Overdue · " + date.textContent;
+      }
+
+      meta.appendChild(date);
+    }
+
+    info.append(title, meta);
+
+    const del = document.createElement("button");
+    del.className = "delete-btn";
+    del.textContent = "×";
+    del.title = "Delete task";
+    del.setAttribute("aria-label", "Delete " + task.text);
+
+    del.addEventListener("click", () => {
+      tasks.splice(index, 1);
+      save();
+      render();
+    });
+
+    row.append(check, info, del);
+    $("taskList").appendChild(row);
+  });
+}
+
+$("taskForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const text = $("taskInput").value.trim();
+  if (!text) return;
+
+  tasks.push({
+    text: text,
+    subject: $("subject").value,
+    dueDate: $("dueDate").value,
+    done: false
+  });
+
+  save();
+  $("taskForm").reset();
+
+  filter = "all";
+  view = "all";
+
+  updateButtons();
+  render();
+
+  $("taskInput").focus();
+});
+
+function updateButtons() {
+  document.querySelectorAll("[data-filter]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.filter === filter
+    );
+  });
+
+  document.querySelectorAll("[data-view]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.view === view
+    );
+  });
+
+  $("listTitle").textContent =
+    view === "pending" ? "My pending tasks" :
+    view === "completed" ? "Completed tasks" :
+    "Your tasks";
+}
+
+document.querySelectorAll("[data-filter]").forEach(button => {
+  button.addEventListener("click", () => {
+    filter = button.dataset.filter;
+    updateButtons();
+    render();
+  });
+});
+
+document.querySelectorAll("[data-view]").forEach(button => {
+  button.addEventListener("click", () => {
+    view = button.dataset.view;
+    filter = "all";
+    updateButtons();
+    render();
+  });
+});
+
+render();
+</script>
+
+</body>
+</html>
