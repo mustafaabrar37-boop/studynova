@@ -928,20 +928,35 @@ render();
 #timerStatus { color: #c4b5fd; }
 </style>
 
+
 <section class="study-timer">
   <h2>⏱️ Study Timer</h2>
+
   <p id="timerStatus">Ready to focus?</p>
+
   <div id="timerDisplay">25:00</div>
 
-  <button onclick="startStudyTimer()">Start</button>
-  <button onclick="pauseStudyTimer()">Pause</button>
-  <button onclick="resetStudyTimer()">Reset</button>
+  <button onclick="setTimerMode('study')">
+    📚 Study
+  </button>
 
-  <p>Completed sessions: <strong id="timerSessions">0</strong></p>
-  <p>Focus for 25 minutes. You've got this!</p>
+  <button onclick="setTimerMode('break')">
+    ☕ Break
+  </button>
+
+  <br><br>
+
+  <button onclick="startStudyTimer()">▶ Start</button>
+  <button onclick="pauseStudyTimer()">⏸ Pause</button>
+  <button onclick="resetStudyTimer()">↻ Reset</button>
+
+  <p>Completed study sessions: 
+    <strong id="timerSessions">0</strong>
+  </p>
 </section>
 
 <script>
+let timerMode = "study";
 let studyTime = 25 * 60;
 let studyInterval = null;
 let studyRunning = false;
@@ -956,11 +971,25 @@ function showStudyTime() {
     String(seconds).padStart(2, "0");
 }
 
+function setTimerMode(mode) {
+  clearInterval(studyInterval);
+  studyRunning = false;
+  timerMode = mode;
+
+  studyTime = mode === "study" ? 25 * 60 : 5 * 60;
+
+  document.getElementById("timerStatus").textContent =
+    mode === "study" ? "📚 Time to focus!" : "☕ Time to relax!";
+
+  showStudyTime();
+}
+
 function startStudyTimer() {
   if (studyRunning) return;
 
   studyRunning = true;
-  document.getElementById("timerStatus").textContent = "🔥 Focus time!";
+  document.getElementById("timerStatus").textContent =
+    timerMode === "study" ? "🔥 Focus time!" : "☕ Enjoy your break!";
 
   studyInterval = setInterval(() => {
     studyTime--;
@@ -969,16 +998,20 @@ function startStudyTimer() {
     if (studyTime <= 0) {
       clearInterval(studyInterval);
       studyRunning = false;
-      completedStudySessions++;
 
-      document.getElementById("timerSessions").textContent =
-        completedStudySessions;
+      if (timerMode === "study") {
+        completedStudySessions++;
+        document.getElementById("timerSessions").textContent =
+          completedStudySessions;
 
-      document.getElementById("timerStatus").textContent =
-        "🎉 Session completed! Take a break.";
-
-      studyTime = 25 * 60;
-      showStudyTime();
+        document.getElementById("timerStatus").textContent =
+          "🎉 Study session complete! Break time!";
+        setTimerMode("break");
+      } else {
+        document.getElementById("timerStatus").textContent =
+          "☕ Break finished! Ready to study?";
+        setTimerMode("study");
+      }
     }
   }, 1000);
 }
@@ -990,15 +1023,12 @@ function pauseStudyTimer() {
 }
 
 function resetStudyTimer() {
-  clearInterval(studyInterval);
-  studyRunning = false;
-  studyTime = 25 * 60;
-  showStudyTime();
-  document.getElementById("timerStatus").textContent = "Ready to focus?";
+  setTimerMode(timerMode);
 }
 
 showStudyTime();
 </script>
+
 
 </body>
 </html>
